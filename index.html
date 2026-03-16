@@ -3,214 +3,371 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion d'Entretien Véhicule</title>
+    <title>Garage Pro - Cloud Galaxy Edition</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        /* Les couleurs et variables du design */
         :root {
-            --primary-color: #2563eb;
-            --primary-hover: #1d4ed8;
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
-            --input-bg: #ffffff;
-            --fixed-bg: #f1f5f9;
+            --bg-gradient: radial-gradient(circle at top right, #e0e7ff, #fdf2f8, #f0f9ff);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --text-color: #1e293b;
+            --accent: #6366f1;
+            --input-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        [data-theme="dark"] {
+            --bg-gradient: radial-gradient(circle at top right, #1e1b4b, #312e81, #020617);
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-color: #f8fafc;
+            --accent: #818cf8;
+            --input-bg: rgba(30, 41, 59, 0.7);
+            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
         }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            padding: 2rem 1rem;
-            min-height: 100vh;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; transition: all 0.3s ease; }
+        body { background: var(--bg-gradient); background-attachment: fixed; min-height: 100vh; color: var(--text-color); display: flex; justify-content: center; align-items: center; padding: 20px; }
 
-        .container {
-            background-color: var(--card-bg);
-            width: 100%;
-            max-width: 800px;
-            padding: 2.5rem;
-            border-radius: 16px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
-        }
+        .hidden { display: none !important; }
 
-        .header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
+        /* Login Screen */
+        #login-screen { width: 100%; max-width: 400px; }
+        .login-card { background: var(--glass-bg); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); padding: 2.5rem; border-radius: 30px; box-shadow: var(--shadow); text-align: center; }
+        .login-card h2 { margin-bottom: 1.5rem; font-size: 1.8rem; font-weight: 800; background: linear-gradient(to right, var(--accent), #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .login-card input { width: 100%; padding: 12px 20px; border-radius: 15px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-color); margin-bottom: 1rem; outline: none; text-align: center; font-size: 1.1rem; }
+        #login-error { color: #ff4d4d; font-size: 0.85rem; margin-bottom: 1rem; font-weight: 600; }
 
-        .header h1 {
-            font-size: 1.8rem;
-            color: var(--text-main);
-            margin-bottom: 0.5rem;
-        }
+        /* App Layout */
+        #app-content { width: 100%; max-width: 1000px; display: none; flex-direction: column; gap: 20px; align-self: flex-start; }
+        .glass-card { background: var(--glass-bg); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); padding: 2rem; border-radius: 30px; box-shadow: var(--shadow); }
 
-        .header p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
+        /* Navigation */
+        .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .user-tag { background: var(--accent); color: white; padding: 5px 15px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
+        /* Buttons */
+        .btn-action { background: var(--accent); color: white; border: none; padding: 12px 25px; border-radius: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; justify-content: center; }
+        .btn-action:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4); }
+        .btn-logout { background: #ff4d4d; padding: 8px 15px; border-radius: 12px; font-size: 0.8rem; }
 
-        .section-title {
-            grid-column: 1 / -1;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 0.5rem;
-            margin-top: 1rem;
-            margin-bottom: 0.5rem;
-        }
+        /* Dashboard Menu */
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem; }
+        .menu-item { background: var(--input-bg); padding: 2.5rem; border-radius: 25px; text-align: center; cursor: pointer; border: 1px solid var(--glass-border); }
+        .menu-item:hover { border-color: var(--accent); transform: scale(1.03); }
+        .menu-item i { font-size: 2.5rem; margin-bottom: 15px; color: var(--accent); display: block; }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
+        /* Form */
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 1.5rem; }
+        .full { grid-column: span 2; }
+        label { font-size: 0.8rem; font-weight: 600; opacity: 0.8; margin-left: 5px; }
+        input, textarea, select { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-color); outline: none; }
 
-        .form-group.full-width {
-            grid-column: 1 / -1;
-        }
+        /* Table */
+        .table-container { overflow-x: auto; margin-top: 1.5rem; border-radius: 20px; }
+        table { width: 100%; border-collapse: collapse; background: rgba(255,255,255,0.02); }
+        th { text-align: left; padding: 15px; font-size: 0.7rem; text-transform: uppercase; color: var(--accent); border-bottom: 2px solid var(--glass-border); }
+        td { padding: 15px; border-bottom: 1px solid var(--glass-border); font-size: 0.9rem; }
+        .delete-btn { color: #ff4d4d; cursor: pointer; background: none; border: none; font-size: 1.1rem; }
 
-        label {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-main);
-        }
+        .view { display: none; }
+        .active-view { display: block; animation: fadeInUp 0.4s ease forwards; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        input, textarea, select {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background-color: var(--input-bg);
-            font-size: 1rem;
-            color: var(--text-main);
-            transition: all 0.2s ease;
-        }
-
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-        }
-
-        /* Style spécial pour les données fixes */
-        .fixed-data input {
-            background-color: var(--fixed-bg);
-            font-weight: 600;
-            color: var(--primary-color);
-            border-style: dashed;
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .btn-submit {
-            grid-column: 1 / -1;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 1rem;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-            margin-top: 1.5rem;
-        }
-
-        .btn-submit:hover {
-            background-color: var(--primary-hover);
-        }
-
-        /* Responsive design pour les téléphones */
-        @media (max-width: 600px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            .container {
-                padding: 1.5rem;
-            }
-        }
+        @media (max-width: 650px) { .form-grid, .menu-grid { grid-template-columns: 1fr; } .full { grid-column: span 1; } }
     </style>
 </head>
-<body>
+<body data-theme="light">
 
-    <div class="container">
-        <div class="header">
-            <h1>Fiche d'Intervention</h1>
-            <p>Saisissez les informations du véhicule et les détails de l'entretien</p>
+    <div id="login-screen">
+        <div class="login-card">
+            <h2><i class="fa-solid fa-gauge-high"></i> AutoManager</h2>
+            <form id="login-form" onsubmit="checkPassword(event)">
+                <input type="password" id="password-input" placeholder="Mot de passe" required>
+                <div id="login-error" class="hidden">Accès refusé.</div>
+                <button type="submit" class="btn-action" style="width: 100%;">
+                    <span>Se Connecter</span>
+                </button>
+            </form>
+            <button onclick="toggleTheme()" style="margin-top: 20px; background:none; border:none; color:var(--text-color); cursor:pointer; font-size:0.8rem;">
+                🌓 Changer de mode
+            </button>
         </div>
-
-        <form>
-            <div class="form-grid">
-                
-                <div class="section-title">1. Informations Véhicule (Identifiants)</div>
-                
-                <div class="form-group fixed-data">
-                    <label for="matricule">Matricule</label>
-                    <input type="text" id="matricule" placeholder="Ex: 12345-A-1" required>
-                </div>
-                
-                <div class="form-group fixed-data">
-                    <label for="vehicule">Véhicule (Marque / Modèle)</label>
-                    <input type="text" id="vehicule" placeholder="Ex: Dacia Logan, VW Golf..." required>
-                </div>
-
-                <div class="section-title">2. Détails de l'Entretien (Nouvelle Visite)</div>
-
-                <div class="form-group">
-                    <label for="client">Nom du Client</label>
-                    <input type="text" id="client" placeholder="Ex: Ahmed Alaoui" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="date">Date de l'intervention</label>
-                    <input type="date" id="date" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="kilometrage">Kilométrage Actuel</label>
-                    <input type="number" id="kilometrage" placeholder="Ex: 85000" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="technicien">Technicien en charge</label>
-                    <input type="text" id="technicien" placeholder="Nom du mécanicien" required>
-                </div>
-
-                <div class="form-group full-width">
-                    <label for="entretien">Entretien / Travaux effectués</label>
-                    <input type="text" id="entretien" placeholder="Ex: Vidange complète, Changement des plaquettes..." required>
-                </div>
-
-                <div class="form-group full-width">
-                    <label for="note">Notes / Observations</label>
-                    <textarea id="note" placeholder="Remarques sur l'état de la voiture, prochaines choses à changer..."></textarea>
-                </div>
-
-                <button type="button" class="btn-submit">Enregistrer l'Intervention</button>
-
-            </div>
-        </form>
     </div>
 
+    <div id="app-content">
+        <div class="nav-bar">
+            <div>
+                <span id="role-badge" class="user-tag">Role</span>
+                <button onclick="toggleTheme()" class="theme-toggle" style="background:none; border:none; margin-left:10px; cursor:pointer; color:var(--text-color);">🌓</button>
+            </div>
+            <button class="btn-action btn-logout" onclick="logout()">
+                <i class="fa-solid fa-right-from-bracket"></i> Quitter
+            </button>
+        </div>
+
+        <div class="glass-card">
+            <div id="view-header" style="text-align: center; margin-bottom: 20px;">
+                <h1 id="view-title">Bienvenue</h1>
+                <p id="view-subtitle" style="opacity: 0.7;">Garage Lahcen Auto - Système Cloud</p>
+            </div>
+
+            <div id="v-home" class="view active-view">
+                <div class="menu-grid">
+                    <div class="menu-item" onclick="switchView('add')">
+                        <i class="fa-solid fa-plus-circle"></i>
+                        <h3>Nouvel Entretien</h3>
+                    </div>
+                    <div id="btn-history" class="menu-item" onclick="switchView('search')">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <h3>Historique & Recherche</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div id="v-add" class="view">
+                <button class="btn-action" onclick="switchView('home')" style="background:none; color:var(--accent); padding:0; margin-bottom:15px;">
+                    <i class="fa-solid fa-arrow-left"></i> Retour
+                </button>
+                <form id="maintenanceForm" class="form-grid">
+                    <div class="form-group">
+                        <label>Matricule (Unique)</label>
+                        <input type="text" id="matricule" placeholder="12345-A-6" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Véhicule</label>
+                        <input type="text" id="vehicule" placeholder="Marque / Modèle" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Client</label>
+                        <input type="text" id="client" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" id="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Kilométrage</label>
+                        <input type="number" id="km" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Technicien</label>
+                        <input type="text" id="tech" required>
+                    </div>
+                    <div class="form-group full">
+                        <label>Détails de l'entretien</label>
+                        <input type="text" id="entretien" placeholder="Ex: Vidange moteur, Filtres..." required>
+                    </div>
+                    <div class="form-group full">
+                        <label>Note additionnelle</label>
+                        <textarea id="note" rows="3"></textarea>
+                    </div>
+                    <button type="submit" id="submitBtn" class="btn-action full">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> Sauvegarder sur Firebase
+                    </button>
+                </form>
+            </div>
+
+            <div id="v-search" class="view">
+                <button class="btn-action" onclick="switchView('home')" style="background:none; color:var(--accent); padding:0; margin-bottom:15px;">
+                    <i class="fa-solid fa-arrow-left"></i> Retour
+                </button>
+                <input type="text" id="globalSearch" placeholder="Rechercher par n'importe quelle donnée..." onkeyup="filterTable()" style="margin-bottom: 20px;">
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Véhicule / Matricule</th>
+                                <th>Date / Client</th>
+                                <th>Entretien / KM</th>
+                                <th>Tech</th>
+                                <th id="admin-th" class="hidden">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dataBody">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // Configuration Firebase li sifti
+        const firebaseConfig = {
+            apiKey: "AIzaSyAVwCOEKZUSCPMurHWbgmRjQcQTWpAJ4kc",
+            authDomain: "lahcen-auto.firebaseapp.com",
+            databaseURL: "https://lahcen-auto-default-rtdb.firebaseio.com/",
+            projectId: "lahcen-auto",
+            storageBucket: "lahcen-auto.firebasestorage.app",
+            messagingSenderId: "821702720115",
+            appId: "1:821702720115:web:d5d85ffb1b06a0d2e94806",
+            measurementId: "G-61V8KD2JQP"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const dbRef = ref(db, 'entretiens');
+
+        // Functions exposed to window
+        window.saveToFirebase = function(data) {
+            push(dbRef, data).then(() => {
+                alert("✅ Enregistré avec succès !");
+                document.getElementById('maintenanceForm').reset();
+                switchView('home');
+            });
+        };
+
+        window.deleteEntry = function(id) {
+            if(confirm("Supprimer cette entrée ?")) {
+                remove(ref(db, 'entretiens/' + id));
+            }
+        };
+
+        window.loadData = function() {
+            onValue(dbRef, (snapshot) => {
+                const dataBody = document.getElementById('dataBody');
+                dataBody.innerHTML = "";
+                const role = sessionStorage.getItem('user_role');
+                
+                snapshot.forEach((child) => {
+                    const item = child.val();
+                    const id = child.key;
+                    
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><b>${item.matricule}</b><br><small>${item.vehicule}</small></td>
+                        <td>${item.date}<br><b>${item.client}</b></td>
+                        <td>${item.entretien}<br><small>${item.km} KM</small></td>
+                        <td><span class="user-tag" style="background:var(--input-bg); color:var(--text-color);">${item.tech}</span></td>
+                        <td class="${role === 'SUPER_ADMIN' ? '' : 'hidden'}">
+                            <button class="delete-btn" onclick="deleteEntry('${id}')"><i class="fa-solid fa-trash-can"></i></button>
+                        </td>
+                    `;
+                    dataBody.appendChild(tr);
+                });
+            });
+        };
+    </script>
+
+    <script>
+        // LOGIN LOGIC (Based on your provided snippet)
+        function checkPassword(e) {
+            e.preventDefault();
+            const pwd = document.getElementById('password-input').value;
+            const errorMsg = document.getElementById('login-error');
+            const btn = document.querySelector('#login-form button');
+            const originalContent = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>Vérification...</span>';
+            btn.disabled = true;
+
+            const url = 'https://oulid-auto.alamiuness.workers.dev';
+
+            fetch(url, {
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: pwd })
+            })
+            .then(r => r.json())
+            .then(d => {
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+                
+                if(d.success) {
+                    sessionStorage.setItem('auth_token', 'true');
+                    // N'7etto l'role f session (Admin wla Super Admin)
+                    const userRole = d.role || 'ADMIN'; 
+                    sessionStorage.setItem('user_role', userRole);
+                    
+                    document.getElementById('login-screen').style.display = 'none';
+                    document.getElementById('app-content').style.display = 'flex';
+                    document.getElementById('password-input').value = '';
+                    
+                    initUI(userRole);
+                } else {
+                    errorMsg.innerText = 'Accès refusé.';
+                    errorMsg.classList.remove('hidden');
+                    setTimeout(() => errorMsg.classList.add('hidden'), 3000);
+                }
+            })
+            .catch((err) => {
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+                errorMsg.innerText = 'Erreur: ' + err.message;
+                errorMsg.classList.remove('hidden');
+            });
+        }
+
+        function logout() {
+            sessionStorage.clear();
+            location.reload();
+        }
+
+        function initUI(role) {
+            document.getElementById('role-badge').innerText = role.replace('_', ' ');
+            if(role === 'SUPER_ADMIN') {
+                document.getElementById('admin-th')?.classList.remove('hidden');
+            }
+            if(window.loadData) window.loadData();
+        }
+
+        // VIEW NAVIGATION
+        function switchView(v) {
+            document.querySelectorAll('.view').forEach(el => el.classList.remove('active-view'));
+            document.getElementById('v-' + v).classList.add('active-view');
+            
+            const titles = { 'home': 'Tableau de bord', 'add': 'Nouveau Service', 'search': 'Historique Cloud' };
+            document.getElementById('view-title').innerText = titles[v];
+        }
+
+        // FORM SUBMIT
+        document.getElementById('maintenanceForm').onsubmit = function(e) {
+            e.preventDefault();
+            const data = {
+                matricule: document.getElementById('matricule').value.toUpperCase(),
+                vehicule: document.getElementById('vehicule').value,
+                client: document.getElementById('client').value,
+                date: document.getElementById('date').value,
+                km: document.getElementById('km').value,
+                tech: document.getElementById('tech').value,
+                entretien: document.getElementById('entretien').value,
+                note: document.getElementById('note').value,
+                timestamp: Date.now()
+            };
+            if(window.saveToFirebase) window.saveToFirebase(data);
+        };
+
+        // SEARCH FILTER
+        function filterTable() {
+            const val = document.getElementById('globalSearch').value.toLowerCase();
+            const rows = document.querySelectorAll('#dataBody tr');
+            rows.forEach(row => {
+                row.style.display = row.innerText.toLowerCase().includes(val) ? '' : 'none';
+            });
+        }
+
+        // THEME TOGGLE
+        function toggleTheme() {
+            const body = document.body;
+            const current = body.getAttribute('data-theme');
+            body.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
+        }
+
+        // Check session on load
+        window.onload = () => {
+            if(sessionStorage.getItem('auth_token') === 'true') {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('app-content').style.display = 'flex';
+                initUI(sessionStorage.getItem('user_role'));
+            }
+        };
+    </script>
 </body>
 </html>

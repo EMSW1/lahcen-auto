@@ -3,556 +3,1282 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Garage Pro - Cloud Galaxy Edition</title>
+    <title>Oulid Auto</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    
+
     <style>
         :root {
-            --bg-color: #f8fafc;
-            --gradient-1: #c7d2fe;
-            --gradient-2: #fbcfe8;
-            --gradient-3: #bbf7d0;
-            --glass-bg: rgba(255, 255, 255, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.5);
-            --text-color: #0f172a;
-            --accent: #4f46e5;
-            --input-bg: rgba(255, 255, 255, 0.9);
-            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            --bg: #080810;
+            --surface: #0f0f1a;
+            --surface2: #161624;
+            --surface3: #1e1e30;
+            --border: rgba(255,255,255,0.06);
+            --border2: rgba(255,255,255,0.11);
+            --text: #eeeef8;
+            --text2: rgba(238,238,248,0.45);
+            --text3: rgba(238,238,248,0.22);
+            --accent: #8b7fff;
+            --accent2: #6c5ce7;
+            --green: #00d4a0;
+            --red: #ff5470;
+            --gold: #ffd166;
+            --blue: #4da6ff;
         }
 
-        [data-theme="dark"] {
-            --bg-color: #020617;
-            --gradient-1: #1e1b4b;
-            --gradient-2: #3b0764;
-            --gradient-3: #064e3b;
-            --glass-bg: rgba(15, 23, 42, 0.75);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --text-color: #f8fafc;
-            --accent: #818cf8;
-            --input-bg: rgba(30, 41, 59, 0.8);
-            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; transition: all 0.3s ease; }
-        
-        body { 
-            background-color: var(--bg-color);
-            background-image: 
-                radial-gradient(at 20% 20%, var(--gradient-1) 0px, transparent 50%),
-                radial-gradient(at 80% 10%, var(--gradient-2) 0px, transparent 50%),
-                radial-gradient(at 40% 80%, var(--gradient-3) 0px, transparent 50%);
-            background-size: 200% 200%;
-            animation: auroraBG 15s ease-in-out infinite alternate;
-            background-attachment: fixed; 
-            min-height: 100vh; 
-            color: var(--text-color); 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            padding: 20px; 
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px 16px 48px;
         }
-
-        @keyframes auroraBG { 0% { background-position: 0% 0%; } 50% { background-position: 100% 100%; } 100% { background-position: 0% 50%; } }
 
         .hidden { display: none !important; }
 
-        /* Dashboard Stats */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-bottom: 25px; }
-        .stat-card { background: var(--input-bg); padding: 15px; border-radius: 20px; border: 1px solid var(--glass-border); text-align: center; box-shadow: var(--shadow); }
-        .stat-card i { font-size: 1.2rem; color: var(--accent); margin-bottom: 5px; }
-        .stat-card h4 { font-size: 0.75rem; opacity: 0.7; text-transform: uppercase; margin-bottom: 5px; }
-        .stat-card p { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
+        /* LOGIN */
+        #login-screen { width: 100%; max-width: 400px; margin-top: 12vh; }
+        .login-card {
+            background: var(--surface);
+            border: 1px solid var(--border2);
+            border-radius: 24px;
+            padding: 2.8rem 2.2rem;
+            text-align: center;
+            box-shadow: 0 0 0 1px rgba(139,127,255,0.07), 0 32px 64px rgba(0,0,0,0.7);
+        }
+        .login-logo {
+            width: 64px; height: 64px;
+            background: linear-gradient(145deg, var(--accent), var(--accent2));
+            border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem; margin: 0 auto 1.4rem;
+            box-shadow: 0 8px 32px rgba(139,127,255,0.35);
+        }
+        .login-card h2 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.3rem; }
+        .login-sub { color: var(--text2); font-size: 0.88rem; margin-bottom: 1.8rem; }
+        .field-wrap { position: relative; margin-bottom: 12px; }
+        .field-wrap i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text3); font-size: 0.85rem; pointer-events: none; }
+        .login-card input[type="password"] {
+            width: 100%; padding: 13px 14px 13px 40px;
+            background: var(--surface2); border: 1.5px solid var(--border2);
+            border-radius: 12px; color: var(--text);
+            font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 500;
+            outline: none; transition: border-color 0.2s; letter-spacing: 0.05em;
+        }
+        .login-card input:focus { border-color: var(--accent); background: rgba(139,127,255,0.04); }
+        #login-error {
+            color: var(--red); font-size: 0.83rem;
+            background: rgba(255,84,112,0.08); border: 1px solid rgba(255,84,112,0.2);
+            border-radius: 10px; padding: 9px 14px; margin-bottom: 12px;
+        }
+        .btn-login {
+            width: 100%; padding: 13px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white; border: none; border-radius: 12px;
+            font-family: 'Outfit', sans-serif; font-size: 0.95rem; font-weight: 700;
+            cursor: pointer; transition: all 0.2s;
+            box-shadow: 0 4px 20px rgba(139,127,255,0.3);
+        }
+        .btn-login:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(139,127,255,0.45); }
 
-        /* Filter Box */
-        .filter-box { background: var(--glass-bg); padding: 15px; border-radius: 20px; border: 1px solid var(--glass-border); margin-bottom: 25px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: center; }
-        .filter-box input { width: auto; padding: 8px 12px; font-size: 0.85rem; }
+        /* APP */
+        #app-content { width: 100%; max-width: 1120px; display: none; flex-direction: column; gap: 14px; }
 
-        #login-screen { width: 100%; max-width: 400px; }
-        .login-card { background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); padding: 2.5rem; border-radius: 30px; box-shadow: var(--shadow); text-align: center; }
-        .login-card h2 { margin-bottom: 1.5rem; font-size: 1.8rem; font-weight: 800; background: linear-gradient(to right, var(--accent), #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .login-card input { width: 100%; padding: 12px 20px; border-radius: 15px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-color); margin-bottom: 1rem; outline: none; text-align: center; font-size: 1.1rem; }
-        
-        #app-content { width: 100%; max-width: 1100px; display: none; flex-direction: column; gap: 20px; align-self: flex-start; }
-        .glass-card { background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); padding: 2rem; border-radius: 30px; box-shadow: var(--shadow); }
+        /* TOPBAR */
+        .topbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 18px; background: var(--surface);
+            border: 1px solid var(--border); border-radius: 18px;
+        }
+        .tl { display: flex; align-items: center; gap: 11px; }
+        .tlogo {
+            width: 38px; height: 38px;
+            background: linear-gradient(145deg, var(--accent), var(--accent2));
+            border-radius: 11px; display: flex; align-items: center; justify-content: center;
+            font-size: 1rem; box-shadow: 0 4px 16px rgba(139,127,255,0.25);
+        }
+        .tname { font-size: 1rem; font-weight: 800; letter-spacing: -0.02em; }
+        .tr { display: flex; align-items: center; gap: 8px; }
+        .role-pill {
+            background: rgba(139,127,255,0.12); border: 1px solid rgba(139,127,255,0.25);
+            color: var(--accent); padding: 4px 12px; border-radius: 50px;
+            font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+        }
+        .icon-btn {
+            width: 34px; height: 34px; background: var(--surface2); border: 1px solid var(--border);
+            color: var(--text2); border-radius: 9px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-size: 0.82rem;
+            transition: all 0.15s;
+        }
+        .icon-btn:hover { color: var(--text); border-color: var(--border2); }
+        .btn-quit {
+            padding: 7px 14px; background: rgba(255,84,112,0.09); border: 1px solid rgba(255,84,112,0.18);
+            color: var(--red); border-radius: 9px; font-family: 'Outfit', sans-serif;
+            font-size: 0.8rem; font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; gap: 6px; transition: all 0.15s;
+        }
+        .btn-quit:hover { background: rgba(255,84,112,0.16); }
 
-        .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .user-tag { background: var(--accent); color: white; padding: 5px 15px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+        /* MAIN CARD */
+        .main-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 22px; padding: 1.8rem;
+        }
 
-        .btn-action { background: var(--accent); color: white; border: none; padding: 12px 25px; border-radius: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; justify-content: center; }
-        .btn-action:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4); }
-        .btn-import { background: #10b981; margin-bottom: 20px; font-size: 0.85rem; padding: 10px 15px; }
-        .btn-delete-multi { background: #ff4d4d; font-size: 0.85rem; padding: 8px 15px; margin-bottom: 10px; }
-        .btn-logout { background: #ff4d4d; padding: 8px 15px; border-radius: 12px; font-size: 0.8rem; }
-
-        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem; }
-        .menu-item { background: var(--input-bg); padding: 2rem; border-radius: 25px; text-align: center; cursor: pointer; border: 1px solid var(--glass-border); }
-        .menu-item:hover { border-color: var(--accent); transform: scale(1.03); }
-        .menu-item i { font-size: 2rem; margin-bottom: 10px; color: var(--accent); display: block; }
-
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 1.5rem; }
-        .full { grid-column: span 2; }
-        label { font-size: 0.8rem; font-weight: 600; opacity: 0.8; margin-bottom: 5px; display: block;}
-        input, textarea, select { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-color); outline: none; }
-        
-        .search-controls { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 15px; }
-        .search-box-wrapper { flex: 1; min-width: 200px; position: relative; }
-        .search-box-wrapper input { padding-left: 40px; }
-        .search-box-wrapper i { position: absolute; left: 15px; top: 15px; opacity: 0.5; }
-
-        .date-filter-wrapper { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; background: var(--glass-bg); padding: 5px 15px; border-radius: 15px; border: 1px solid var(--glass-border); }
-        .date-filter-wrapper input { padding: 8px 12px; width: auto; font-size: 0.85rem; }
-
-        .table-container { overflow-x: auto; margin-top: 1rem; border-radius: 20px; }
-        table { width: 100%; border-collapse: collapse; min-width: 800px; }
-        th { text-align: left; padding: 15px; font-size: 0.7rem; text-transform: uppercase; color: var(--accent); border-bottom: 2px solid var(--glass-border); }
-        td { padding: 15px; border-bottom: 1px solid var(--glass-border); font-size: 0.85rem; }
-        
-        .action-btns { display: flex; gap: 12px; align-items: center; }
-        .edit-btn { color: #4f46e5; cursor: pointer; background: none; border: none; font-size: 1.1rem; }
-        .delete-btn { color: #ff4d4d; cursor: pointer; background: none; border: none; font-size: 1.1rem; }
-        
-        .row-checkbox { width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent); }
-
+        /* VIEWS */
         .view { display: none; }
-        .active-view { display: block; animation: fadeInUp 0.4s ease forwards; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .active-view { display: block; animation: up 0.3s cubic-bezier(0.22,1,0.36,1); }
+        @keyframes up { from{opacity:0;transform:translateY(14px);} to{opacity:1;transform:translateY(0);} }
 
-        /* Badge pour le nombre de résultats */
-        .results-badge { background: var(--accent); color: white; padding: 5px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: bold; margin-bottom: 10px; display: inline-block; }
+        /* ====== HOME ====== */
+        .dash-top {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            margin-bottom: 22px; flex-wrap: wrap; gap: 12px;
+        }
+        .dash-title { font-size: 1.55rem; font-weight: 800; letter-spacing: -0.035em; line-height: 1.1; }
+        .dash-title span { color: var(--accent); }
+        .dash-sub { color: var(--text2); font-size: 0.82rem; margin-top: 4px; }
+        .dash-datepill {
+            background: var(--surface2); border: 1px solid var(--border2);
+            padding: 7px 14px; border-radius: 50px;
+            font-size: 0.78rem; color: var(--text2); font-weight: 500; white-space: nowrap;
+        }
+
+        /* STATS */
+        .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 16px; }
+        @media(max-width:680px){ .stats-row { grid-template-columns:1fr 1fr; } }
+
+        .sc {
+            background: var(--surface2); border: 1px solid var(--border);
+            border-radius: 16px; padding: 18px 16px;
+            position: relative; overflow: hidden;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .sc:hover { transform: translateY(-3px); border-color: var(--border2); }
+        .sc-glow {
+            position: absolute; width: 80px; height: 80px;
+            border-radius: 50%; top: -22px; right: -22px; opacity: 0.09;
+        }
+        .sc.c1 .sc-glow { background: var(--accent); }
+        .sc.c2 .sc-glow { background: var(--green); }
+        .sc.c3 .sc-glow { background: var(--gold); }
+        .sc.c4 { background: linear-gradient(135deg,rgba(139,127,255,0.17),rgba(108,92,231,0.07)); border-color: rgba(139,127,255,0.2); }
+        .sc.c4 .sc-glow { background: var(--accent); opacity: 0.18; }
+
+        .sc-ico { width: 32px; height: 32px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; margin-bottom: 12px; }
+        .sc.c1 .sc-ico { background: rgba(139,127,255,0.14); color: var(--accent); }
+        .sc.c2 .sc-ico { background: rgba(0,212,160,0.13); color: var(--green); }
+        .sc.c3 .sc-ico { background: rgba(255,209,102,0.13); color: var(--gold); }
+        .sc.c4 .sc-ico { background: rgba(139,127,255,0.18); color: var(--accent); }
+
+        .sc-lbl { font-size: 0.67rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: var(--text2); margin-bottom: 5px; }
+        .sc-val { font-size: 2rem; font-weight: 800; letter-spacing: -0.05em; line-height: 1; color: var(--text); }
+        .sc.c4 .sc-val { color: var(--accent); }
+        .sc-trend { font-size: 0.68rem; color: var(--text3); margin-top: 4px; }
+
+        /* DASH GRID */
+        .dash-grid { display: grid; grid-template-columns: 1fr 320px; gap: 12px; margin-bottom: 16px; }
+        @media(max-width:880px){ .dash-grid { grid-template-columns: 1fr; } }
+
+        .panel {
+            background: var(--surface2); border: 1px solid var(--border);
+            border-radius: 16px; padding: 16px 18px;
+        }
+        .panel-hd {
+            font-size: 0.72rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.08em;
+            color: var(--text2); margin-bottom: 14px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .panel-hd em { color: var(--text3); font-weight: 400; text-transform: none; letter-spacing: 0; font-style: normal; font-size: 0.7rem; }
+
+        /* BAR CHART */
+        .chart-wrap { display: flex; align-items: flex-end; gap: 5px; height: 88px; }
+        .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .bar-track { width: 100%; background: var(--surface3); border-radius: 6px 6px 0 0; display: flex; align-items: flex-end; height: 72px; }
+        .bar-fill {
+            width: 100%; border-radius: 6px 6px 0 0; min-height: 3px;
+            background: linear-gradient(180deg, var(--accent) 0%, var(--accent2) 100%);
+            transition: height 0.7s cubic-bezier(0.22,1,0.36,1);
+        }
+        .bar-fill.today { background: linear-gradient(180deg, var(--green), #00a87e); box-shadow: 0 0 10px rgba(0,212,160,0.28); }
+        .bar-lbl { font-size: 0.58rem; color: var(--text3); font-weight: 700; text-transform: uppercase; }
+
+        /* PROG BAR */
+        .prog-row { display: flex; justify-content: space-between; margin-bottom: 6px; }
+        .prog-lbl { font-size: 0.75rem; font-weight: 600; color: var(--text2); }
+        .prog-num { font-size: 0.75rem; font-weight: 700; color: var(--accent); }
+        .prog-track { height: 5px; background: var(--surface3); border-radius: 50px; overflow: hidden; }
+        .prog-fill { height: 100%; border-radius: 50px; background: linear-gradient(90deg, var(--accent), var(--green)); transition: width 0.9s cubic-bezier(0.22,1,0.36,1); }
+
+        /* TECH RANKING */
+        .tech-list { display: flex; flex-direction: column; gap: 9px; }
+        .tech-row { display: flex; align-items: center; gap: 9px; }
+        .tech-av {
+            width: 28px; height: 28px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.7rem; font-weight: 800; flex-shrink: 0;
+        }
+        .tech-info { flex: 1; min-width: 0; }
+        .tech-name { font-size: 0.8rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .tech-bar { height: 3px; background: var(--surface3); border-radius: 50px; margin-top: 3px; overflow: hidden; }
+        .tech-bar-fill { height: 100%; border-radius: 50px; }
+        .tech-cnt { font-size: 0.7rem; font-weight: 700; color: var(--text2); flex-shrink: 0; }
+
+        /* RECENT */
+        .recent-list { display: flex; flex-direction: column; gap: 7px; }
+        .recent-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 9px 11px; background: var(--surface3);
+            border-radius: 10px; border: 1px solid var(--border);
+            transition: border-color 0.15s;
+        }
+        .recent-item:hover { border-color: var(--border2); }
+        .r-mat {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem; font-weight: 600; color: var(--accent);
+            background: rgba(139,127,255,0.09); padding: 2px 7px;
+            border-radius: 4px; white-space: nowrap; flex-shrink: 0;
+        }
+        .r-info { flex: 1; min-width: 0; }
+        .r-client { font-size: 0.8rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .r-det { font-size: 0.7rem; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
+        .r-date { font-size: 0.68rem; color: var(--text3); font-weight: 500; flex-shrink: 0; }
+
+        /* FILTER ZONE */
+        .filter-zone {
+            background: var(--surface2); border: 1px solid var(--border);
+            border-radius: 12px; padding: 11px 16px;
+            display: flex; align-items: center; gap: 9px; flex-wrap: wrap; margin-bottom: 14px;
+        }
+        .fz-lbl { font-size: 0.7rem; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 0.07em; white-space: nowrap; }
+        .filter-zone input[type="date"] {
+            background: var(--surface); border: 1px solid var(--border2); color: var(--text);
+            border-radius: 8px; padding: 6px 9px; font-size: 0.78rem;
+            font-family: 'Outfit', sans-serif; outline: none; cursor: pointer; transition: border-color 0.2s;
+        }
+        .filter-zone input[type="date"]:focus { border-color: var(--accent); }
+        .fz-sep { color: var(--text3); font-size: 0.72rem; }
+        .fz-res {
+            background: rgba(139,127,255,0.09); border: 1px solid rgba(139,127,255,0.2);
+            color: var(--accent); padding: 5px 12px; border-radius: 50px;
+            font-size: 0.76rem; font-weight: 700;
+        }
+
+        /* MENU */
+        .menu-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .menu-card {
+            background: var(--surface2); border: 1px solid var(--border);
+            border-radius: 16px; padding: 22px 20px;
+            cursor: pointer; display: flex; align-items: center; gap: 16px;
+            position: relative; overflow: hidden;
+            transition: all 0.22s cubic-bezier(0.22,1,0.36,1);
+        }
+        .menu-card::before { content:''; position:absolute; inset:0; opacity:0; transition:opacity 0.22s; }
+        .add-card::before { background: radial-gradient(ellipse 80% 60% at 0% 50%, rgba(139,127,255,0.07), transparent); }
+        .srch-card::before { background: radial-gradient(ellipse 80% 60% at 0% 50%, rgba(0,212,160,0.06), transparent); }
+        .menu-card:hover { transform: translateY(-3px); }
+        .menu-card:hover::before { opacity: 1; }
+        .add-card:hover { border-color: rgba(139,127,255,0.3); box-shadow: 0 10px 36px rgba(139,127,255,0.1); }
+        .srch-card:hover { border-color: rgba(0,212,160,0.25); box-shadow: 0 10px 36px rgba(0,212,160,0.07); }
+        .mc-ico { width: 46px; height: 46px; border-radius: 13px; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; flex-shrink: 0; }
+        .add-card .mc-ico { background: rgba(139,127,255,0.13); color: var(--accent); }
+        .srch-card .mc-ico { background: rgba(0,212,160,0.1); color: var(--green); }
+        .mc-txt h3 { font-size: 0.93rem; font-weight: 700; margin-bottom: 2px; }
+        .mc-txt p { font-size: 0.73rem; color: var(--text2); }
+        .mc-arr { margin-left: auto; color: var(--text3); font-size: 0.78rem; transition: transform 0.2s, color 0.2s; }
+        .menu-card:hover .mc-arr { transform: translateX(4px); color: var(--text2); }
+
+        /* ====== FORM ====== */
+        .view-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
+        .btn-back {
+            display: flex; align-items: center; gap: 7px;
+            background: var(--surface2); border: 1px solid var(--border);
+            color: var(--text2); padding: 8px 14px; border-radius: 10px;
+            font-family: 'Outfit', sans-serif; font-size: 0.82rem; font-weight: 600;
+            cursor: pointer; transition: all 0.15s;
+        }
+        .btn-back:hover { color: var(--text); border-color: var(--border2); }
+        .view-title { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.025em; margin-bottom: 18px; }
+
+        /* RADIO */
+        .radio-row { display: flex; gap: 8px; margin-bottom: 22px; }
+        .radio-opt {
+            flex: 1; display: flex; align-items: center; gap: 8px;
+            padding: 11px 14px; background: var(--surface2);
+            border: 1.5px solid var(--border); border-radius: 11px;
+            cursor: pointer; font-size: 0.85rem; font-weight: 600;
+            color: var(--text2); transition: all 0.18s; user-select: none;
+        }
+        .radio-opt input { display: none; }
+        .rdot {
+            width: 16px; height: 16px; border-radius: 50%;
+            border: 2px solid var(--border2); display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; transition: all 0.18s;
+        }
+        .rdot::after { content:''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); transform: scale(0); transition: transform 0.18s; }
+        .radio-opt.active { border-color: var(--accent); background: rgba(139,127,255,0.07); color: var(--text); }
+        .radio-opt.active .rdot { border-color: var(--accent); }
+        .radio-opt.active .rdot::after { transform: scale(1); }
+
+        /* FORM GRID */
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        @media(max-width:560px){ .form-grid { grid-template-columns: 1fr; } }
+        .full { grid-column: span 2; }
+        @media(max-width:560px){ .full { grid-column: span 1; } }
+
+        /* FIELD */
+        .field { display: flex; flex-direction: column; gap: 7px; }
+        .f-label {
+            font-size: 0.72rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.08em; color: var(--text2);
+            display: flex; align-items: center; gap: 6px;
+        }
+        .manage-lnk { color: var(--accent); cursor: pointer; font-weight: 700; font-size: 0.67rem; transition: opacity 0.15s; }
+        .manage-lnk:hover { opacity: 0.8; }
+
+        .field input,
+        .field textarea,
+        .field select {
+            width: 100%;
+            background: var(--surface2);
+            border: 1.5px solid var(--border2);
+            color: var(--text);
+            border-radius: 11px;
+            padding: 12px 14px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem; font-weight: 500;
+            outline: none; transition: border-color 0.18s, background 0.18s;
+            line-height: 1.4;
+        }
+        .field input::placeholder,
+        .field textarea::placeholder { color: var(--text3); font-weight: 400; }
+        .field input:focus, .field textarea:focus, .field select:focus {
+            border-color: var(--accent); background: rgba(139,127,255,0.04);
+        }
+        .field input[type="number"] { font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; }
+        .field input[type="date"] { cursor: pointer; }
+        .field textarea { min-height: 72px; resize: vertical; }
+        .field select option { background: var(--surface2); }
+
+        /* TECH CHECKBOXES */
+        .tech-checkbox-grid {
+            display: flex; flex-wrap: wrap; gap: 8px;
+            background: var(--surface2); border: 1.5px solid var(--border2);
+            border-radius: 11px; padding: 12px 14px; min-height: 48px;
+        }
+        .tech-cb-lbl {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: var(--surface); border: 1px solid var(--border);
+            padding: 7px 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 500;
+            cursor: pointer; transition: all 0.15s; user-select: none; color: var(--text2);
+        }
+        .tech-cb-lbl:hover { border-color: var(--border2); color: var(--text); }
+        .tech-cb-lbl input { display: none; }
+        .tech-cb-lbl.active-cb {
+            background: rgba(139,127,255,0.1);
+            border-color: var(--accent);
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* MATRICULE DROPDOWN */
+        .mat-wrap { position: relative; }
+        #matricule-dropdown {
+            position: absolute; top: calc(100% + 5px); left: 0; right: 0; z-index: 999;
+            background: var(--surface2); border: 1px solid var(--border2);
+            border-radius: 13px; max-height: 210px; overflow-y: auto;
+            box-shadow: 0 16px 48px rgba(0,0,0,0.6);
+        }
+        .mat-opt {
+            padding: 10px 14px; cursor: pointer;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.83rem; font-weight: 500; transition: background 0.12s;
+        }
+        .mat-opt:last-child { border-bottom: none; }
+        .mat-opt:hover { background: rgba(139,127,255,0.09); }
+        .mat-opt small { display: block; color: var(--text3); font-size: 0.71rem; margin-top: 1px; font-weight: 400; }
+        .mat-hl { color: var(--accent); font-weight: 800; }
+
+        /* TECH BOX */
+        .tech-box {
+            background: rgba(139,127,255,0.04); border: 1px dashed rgba(139,127,255,0.25);
+            border-radius: 11px; padding: 11px; margin-top: 6px;
+        }
+        .tech-box input {
+            background: var(--surface2); border: 1.5px solid var(--border2);
+            color: var(--text); border-radius: 9px; padding: 10px 12px;
+            width: 100%; font-family: 'Outfit', sans-serif; font-size: 0.85rem;
+            outline: none; margin-bottom: 8px; font-weight: 500;
+        }
+        .tech-box input:focus { border-color: var(--accent); }
+        .tech-box-row { display: flex; gap: 7px; }
+
+        /* BUTTONS */
+        .btn-primary {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 12px 22px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white; border: none; border-radius: 11px;
+            font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 700;
+            cursor: pointer; transition: all 0.18s;
+            box-shadow: 0 4px 18px rgba(139,127,255,0.27);
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(139,127,255,0.42); }
+        .btn-primary.full { width: 100%; justify-content: center; padding: 13px; font-size: 0.95rem; }
+
+        .btn-sm-green {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 9px 14px; background: rgba(0,212,160,0.1);
+            border: 1px solid rgba(0,212,160,0.22); color: var(--green);
+            border-radius: 9px; font-family: 'Outfit', sans-serif;
+            font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: all 0.15s;
+        }
+        .btn-sm-green:hover { background: rgba(0,212,160,0.18); }
+
+        .btn-sm-red {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 9px 13px; background: rgba(255,84,112,0.09);
+            border: 1px solid rgba(255,84,112,0.2); color: var(--red);
+            border-radius: 9px; font-family: 'Outfit', sans-serif;
+            font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: all 0.15s;
+        }
+        .btn-sm-red:hover { background: rgba(255,84,112,0.16); }
+
+        .btn-sm-ico {
+            padding: 8px 11px; background: var(--surface2);
+            border: 1px solid var(--border); color: var(--text2);
+            border-radius: 9px; font-size: 0.82rem; cursor: pointer; transition: all 0.15s;
+        }
+        .btn-sm-ico:hover { color: var(--text); border-color: var(--border2); }
+
+        /* SEARCH */
+        .srch-controls { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 16px; align-items: center; }
+        .srch-wrap { position: relative; flex: 1; min-width: 220px; }
+        .srch-wrap i { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--text3); font-size: 0.82rem; pointer-events: none; }
+        .srch-wrap input {
+            width: 100%; padding: 11px 14px 11px 36px;
+            background: var(--surface2); border: 1.5px solid var(--border2);
+            color: var(--text); border-radius: 11px;
+            font-family: 'Outfit', sans-serif; font-size: 0.88rem; font-weight: 500;
+            outline: none; transition: border-color 0.18s;
+        }
+        .srch-wrap input:focus { border-color: var(--accent); }
+        .srch-wrap input::placeholder { color: var(--text3); font-weight: 400; }
+        .date-range {
+            display: flex; align-items: center; gap: 7px;
+            background: var(--surface2); border: 1px solid var(--border2);
+            border-radius: 11px; padding: 6px 12px; flex-wrap: wrap;
+        }
+        .date-range label { font-size: 0.7rem; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; white-space: nowrap; }
+        .date-range input[type="date"] {
+            background: transparent; border: none; color: var(--text);
+            font-family: 'Outfit', sans-serif; font-size: 0.8rem; font-weight: 500; outline: none; cursor: pointer;
+        }
+        .dr-sep { color: var(--text3); font-size: 0.7rem; }
+        .limit-sel {
+            background: var(--surface2); border: 1px solid var(--border2); color: var(--text);
+            border-radius: 10px; padding: 9px 11px;
+            font-family: 'Outfit', sans-serif; font-size: 0.8rem; font-weight: 500; outline: none; cursor: pointer;
+        }
+        .res-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+        .res-pill {
+            background: rgba(139,127,255,0.09); border: 1px solid rgba(139,127,255,0.18);
+            color: var(--accent); padding: 5px 13px; border-radius: 50px;
+            font-size: 0.74rem; font-weight: 700;
+        }
+
+        /* TABLE */
+        .tbl-wrap { overflow-x: auto; border-radius: 14px; border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; min-width: 680px; }
+        thead tr { background: var(--surface2); }
+        th {
+            padding: 11px 14px; text-align: left;
+            font-size: 0.63rem; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 0.09em; color: var(--text2);
+            border-bottom: 1px solid var(--border); white-space: nowrap;
+        }
+        td { padding: 12px 14px; border-bottom: 1px solid var(--border); font-size: 0.83rem; font-weight: 500; vertical-align: middle; }
+        tbody tr:last-child td { border-bottom: none; }
+        tbody tr { transition: background 0.12s; }
+        tbody tr:hover { background: rgba(255,255,255,0.016); }
+        .mat-tag {
+            display: inline-block; font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem; font-weight: 600;
+            background: rgba(139,127,255,0.1); border: 1px solid rgba(139,127,255,0.17);
+            color: var(--accent); padding: 3px 8px; border-radius: 5px; letter-spacing: 0.04em;
+        }
+        td small { display: block; color: var(--text2); font-size: 0.72rem; margin-top: 2px; font-weight: 400; }
+        td strong { font-weight: 700; }
+        .row-acts { display: flex; gap: 6px; }
+        .act-btn { width: 30px; height: 30px; border-radius: 8px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; transition: all 0.12s; }
+        .act-btn.ed { background: rgba(139,127,255,0.1); color: var(--accent); }
+        .act-btn.ed:hover { background: rgba(139,127,255,0.2); }
+        .act-btn.dl { background: rgba(255,84,112,0.1); color: var(--red); }
+        .act-btn.dl:hover { background: rgba(255,84,112,0.2); }
+        .row-cb { width: 15px; height: 15px; cursor: pointer; accent-color: var(--accent); }
+        .empty-td { text-align: center; padding: 44px 20px; color: var(--text3); font-size: 0.85rem; }
+
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 10px; }
     </style>
 </head>
-<body data-theme="light">
+<body>
 
-    <div id="login-screen">
-        <div class="login-card">
-            <h2><i class="fa-solid fa-gauge-high"></i> AutoManager</h2>
-            <form id="login-form" onsubmit="checkPassword(event)">
+<div id="login-screen">
+    <div class="login-card">
+        <div id="login-theme-row" style="display:flex;justify-content:flex-end;margin-bottom:1rem;">
+            <button id="login-theme-btn" onclick="loginToggleTheme()" style="background:var(--surface2);border:1px solid var(--border2);color:var(--text2);border-radius:50px;padding:6px 14px;font-family:'Outfit',sans-serif;font-size:0.75rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.2s;">
+                <i class="fa-solid fa-moon" id="login-theme-ico"></i>
+                <span id="login-theme-lbl">Mode Nuit</span>
+            </button>
+        </div>
+        <div class="login-logo">🔧</div>
+        <h2>Oulid Auto</h2>
+        <p class="login-sub">Espace sécurisé — Gestion garage</p>
+        <form id="login-form" onsubmit="checkPassword(event)">
+            <div class="field-wrap">
+                <i class="fa-solid fa-lock"></i>
                 <input type="password" id="password-input" placeholder="Mot de passe" required>
-                <div id="login-error" class="hidden" style="color:red; margin-bottom:10px;">Accès refusé.</div>
-                <button type="submit" class="btn-action" style="width: 100%;">Se Connecter</button>
-            </form>
+            </div>
+            <div id="login-error" class="hidden">Accès refusé. Mot de passe incorrect.</div>
+            <button type="submit" class="btn-login"><i class="fa-solid fa-arrow-right-to-bracket"></i> Se Connecter</button>
+        </form>
+    </div>
+</div>
+
+<div id="app-content">
+
+    <div class="topbar">
+        <div class="tl">
+            <div class="tlogo">🔧</div>
+            <span class="tname">Oulid Auto</span>
+        </div>
+        <div class="tr">
+            <span id="role-badge" class="role-pill">—</span>
+            <button class="icon-btn" onclick="toggleTheme()"><i class="fa-solid fa-circle-half-stroke"></i></button>
+            <button class="btn-quit" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Quitter</button>
         </div>
     </div>
 
-    <div id="app-content">
-        <div class="nav-bar">
-            <div>
-                <span id="role-badge" class="user-tag">Role</span>
-                <button onclick="toggleTheme()" style="background:none; border:none; margin-left:10px; cursor:pointer; color:var(--text-color);"><i class="fa-solid fa-circle-half-stroke"></i></button>
-            </div>
-            <button class="btn-action btn-logout" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Quitter</button>
-        </div>
+    <div class="main-card">
 
-        <div class="glass-card">
-            <div id="view-header" style="text-align: center; margin-bottom: 20px;">
-                <h1 id="view-title">Tableau de Bord</h1>
-                <p id="view-subtitle" style="opacity: 0.7;">Garage Lahcen Auto - Système Cloud</p>
+        <div id="v-home" class="view active-view">
+
+            <div class="dash-top">
+                <div>
+                    <div class="dash-title">DASH<span>BORD</span></div>
+                    <div class="dash-sub">Garage Oulid Auto</div>
+                </div>
+                <div class="dash-datepill" id="dash-today-lbl">—</div>
             </div>
 
-            <div id="v-home" class="view active-view">
-                <div class="stats-grid">
-                    <div class="stat-card"><i class="fa-solid fa-calendar-day"></i><h4>Aujourd'hui</h4><p id="stat-today">0</p></div>
-                    <div class="stat-card"><i class="fa-solid fa-calendar-check"></i><h4>Ce Mois</h4><p id="stat-month">0</p></div>
-                    <div class="stat-card"><i class="fa-solid fa-layer-group"></i><h4>Cette Année</h4><p id="stat-year">0</p></div>
-                    <div class="stat-card" style="background: var(--accent); border:none;"><i class="fa-solid fa-database" style="color:white;"></i><h4 style="color:white; opacity:0.9;">Total</h4><p id="stat-total" style="color:white;">0</p></div>
+            <div class="stats-row">
+                <div class="sc c1">
+                    <div class="sc-glow"></div>
+                    <div class="sc-ico"><i class="fa-solid fa-calendar-day"></i></div>
+                    <div class="sc-lbl">Aujourd'hui</div>
+                    <div class="sc-val" id="stat-today">0</div>
                 </div>
-
-                <div class="filter-box">
-                    <label>Filtrer :</label>
-                    <input type="date" id="dash-start" onchange="calculateCustomStat()">
-                    <span>au</span>
-                    <input type="date" id="dash-end" onchange="calculateCustomStat()">
-                    <div id="custom-res" class="user-tag" style="background:var(--input-bg); color:var(--accent); border:1px solid var(--accent);">Résultat: 0</div>
+                <div class="sc c2">
+                    <div class="sc-glow"></div>
+                    <div class="sc-ico"><i class="fa-solid fa-calendar-check"></i></div>
+                    <div class="sc-lbl">Ce Mois</div>
+                    <div class="sc-val" id="stat-month">0</div>
+                    <div class="sc-trend" id="tr-month"></div>
                 </div>
-
-                <div class="menu-grid">
-                    <div class="menu-item" onclick="switchView('add')"><i class="fa-solid fa-plus-circle"></i><h3>Nouvel Entretien</h3></div>
-                    <div class="menu-item" onclick="switchView('search')"><i class="fa-solid fa-magnifying-glass"></i><h3>Historique & Recherche</h3></div>
+                <div class="sc c3">
+                    <div class="sc-glow"></div>
+                    <div class="sc-ico"><i class="fa-solid fa-layer-group"></i></div>
+                    <div class="sc-lbl">Cette Année</div>
+                    <div class="sc-val" id="stat-year">0</div>
+                    <div class="sc-trend" id="tr-year"></div>
+                </div>
+                <div class="sc c4">
+                    <div class="sc-glow"></div>
+                    <div class="sc-ico"><i class="fa-solid fa-database"></i></div>
+                    <div class="sc-lbl">Total</div>
+                    <div class="sc-val" id="stat-total">0</div>
                 </div>
             </div>
 
-            <div id="v-add" class="view">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom:15px;">
-                    <button class="btn-action" onclick="goHomeAndReset()" style="background:none; color:var(--accent); box-shadow:none;"><i class="fa-solid fa-arrow-left"></i> Retour</button>
-                    <div id="import-section" class="hidden">
-                        <input type="file" id="excel-file" class="hidden" onchange="handleExcelImport(event)">
-                        <button class="btn-action btn-import" onclick="document.getElementById('excel-file').click()"><i class="fa-solid fa-file-excel"></i> Importer Excel</button>
+            <div class="dash-grid">
+                <div style="display:flex;flex-direction:column;gap:12px;">
+                    <div class="panel">
+                        <div class="panel-hd">Activité — 7 derniers jours <em id="chart-week-lbl">0 cette semaine</em></div>
+                        <div class="chart-wrap" id="activity-chart"></div>
                     </div>
-                </div>
-                <form id="maintenanceForm" class="form-grid">
-                    <div class="full radio-group-container" style="display:flex; gap:15px; padding:10px; background:rgba(0,0,0,0.05); border-radius:10px;">
-                        <label><input type="radio" name="mat_type" value="new" checked onchange="toggleMatriculeType()"> Nouveau</label>
-                        <label><input type="radio" name="mat_type" value="existing" onchange="toggleMatriculeType()"> Existant</label>
-                    </div>
-                    <div class="form-group"><label>Matricule</label><input type="text" id="matricule" required><select id="matricule-select" class="hidden" onchange="fillVehicleInfo()"></select></div>
-                    <div class="form-group"><label>Véhicule</label><input type="text" id="vehicule" required></div>
-                    <div class="form-group"><label>Client</label><input type="text" id="client" required></div>
-                    <div class="form-group"><label>Date</label><input type="date" id="date" required></div>
-                    <div class="form-group"><label>Kilométrage</label><input type="number" id="km" required></div>
-                    <div class="form-group">
-                        <label>Technicien <span id="tech-admin-link" class="hidden" onclick="toggleTechAdmin()" style="cursor:pointer; text-decoration:underline;">[Gérer]</span></label>
-                        <select id="tech" required></select>
-                        <div id="tech-admin-box" class="tech-box hidden" style="padding:10px; border:1px dashed var(--accent); margin-top:5px;">
-                            <input type="text" id="new-tech-name" placeholder="Nom">
-                            <div style="display:flex; gap:5px; margin-top:5px;">
-                                <button type="button" onclick="addTech()" class="btn-action" style="flex:1;">+</button>
-                                <button type="button" onclick="removeTech()" class="btn-logout" style="flex:1;">-</button>
-                            </div>
+                    <div class="menu-row">
+                        <div class="menu-card add-card" onclick="switchView('add')">
+                            <div class="mc-ico"><i class="fa-solid fa-plus"></i></div>
+                            <div class="mc-txt"><h3>Nouvel Entretien</h3><p>Ajouter une fiche de maintenance</p></div>
+                            <i class="fa-solid fa-chevron-right mc-arr"></i>
+                        </div>
+                        <div class="menu-card srch-card" onclick="switchView('search')">
+                            <div class="mc-ico"><i class="fa-solid fa-magnifying-glass"></i></div>
+                            <div class="mc-txt"><h3>Historique</h3><p>Rechercher & consulter les fiches</p></div>
+                            <i class="fa-solid fa-chevron-right mc-arr"></i>
                         </div>
                     </div>
-                    <div class="form-group full"><label>Détails</label><input type="text" id="entretien"></div>
-                    <div class="form-group full"><label>Note</label><textarea id="note"></textarea></div>
-                    <button type="submit" id="save-btn" class="btn-action full">Sauvegarder</button>
-                </form>
+                </div>
+
+                <div style="display:flex;flex-direction:column;gap:12px;">
+                    <div class="panel">
+                        <div class="panel-hd">Top Techniciens <em>ce mois</em></div>
+                        <div class="tech-list" id="tech-ranking"><div style="color:var(--text3);font-size:0.78rem;">Chargement...</div></div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-hd">Top Clients <em>ce mois</em></div>
+                        <div class="tech-list" id="client-ranking"><div style="color:var(--text3);font-size:0.78rem;">Chargement...</div></div>
+                    </div>
+                    <div class="panel" style="flex:1;">
+                        <div class="panel-hd">Dernières fiches <em>récentes</em></div>
+                        <div class="recent-list" id="recent-list"><div style="color:var(--text3);font-size:0.78rem;">Chargement...</div></div>
+                    </div>
+                </div>
             </div>
 
-            <div id="v-search" class="view">
-                <button class="btn-action" onclick="goHomeAndReset()" style="background:none; color:var(--accent); box-shadow:none; margin-bottom:15px;"><i class="fa-solid fa-arrow-left"></i> Retour</button>
-                
-                <div class="search-controls">
-                    <div class="search-box-wrapper">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" id="globalSearch" placeholder="Rechercher..." onkeyup="renderTable()">
+        </div>
+
+        <div id="v-add" class="view">
+            <div class="view-topbar">
+                <button class="btn-back" onclick="goHomeAndReset()"><i class="fa-solid fa-arrow-left"></i> Retour</button>
+                <div id="import-section" class="hidden">
+                    <input type="file" id="excel-file" class="hidden" accept=".xlsx,.xls" onchange="handleExcelImport(event)">
+                    <button class="btn-sm-green" onclick="document.getElementById('excel-file').click()">
+                        <i class="fa-solid fa-file-excel"></i> Importer Excel
+                    </button>
+                </div>
+            </div>
+
+            <div class="view-title" id="form-title">Nouvel Entretien</div>
+
+            <div class="radio-row">
+                <label class="radio-opt active" id="ro-new" onclick="selectRadio('new')">
+                    <input type="radio" name="mat_type" value="new" checked onchange="toggleMatriculeType()">
+                    <div class="rdot"></div>
+                    <i class="fa-solid fa-plus-circle" style="font-size:0.82rem;"></i> Nouveau véhicule
+                </label>
+                <label class="radio-opt" id="ro-ex" onclick="selectRadio('existing')">
+                    <input type="radio" name="mat_type" value="existing" onchange="toggleMatriculeType()">
+                    <div class="rdot"></div>
+                    <i class="fa-solid fa-car" style="font-size:0.82rem;"></i> Véhicule existant
+                </label>
+            </div>
+
+            <form id="maintenanceForm" class="form-grid">
+
+                <div class="field mat-wrap">
+                    <label class="f-label">Matricule</label>
+                    <input type="text" id="matricule" required placeholder="Ex: 12345-A-1">
+                    <div id="mat-ex-wrap" class="hidden" style="position:relative;">
+                        <input type="text" id="matricule-select" class="hidden" autocomplete="off"
+                            placeholder="Écrire pour chercher..."
+                            oninput="handleMatriculeInput(this.value)"
+                            onfocus="handleMatriculeInput(this.value)"
+                            onblur="setTimeout(()=>closeMatriculeDropdown(),220)">
+                        <div id="matricule-dropdown" style="display:none;"></div>
                     </div>
+                </div>
+
+                <div class="field">
+                    <label class="f-label">Véhicule</label>
+                    <input type="text" id="vehicule" required placeholder="Marque Modèle">
+                </div>
+                <div class="field">
+                    <label class="f-label">Client</label>
+                    <input type="text" id="client" required placeholder="Nom complet">
+                </div>
+                <div class="field">
+                    <label class="f-label">Date</label>
+                    <input type="date" id="date" required>
+                </div>
+                <div class="field">
+                    <label class="f-label">Kilométrage</label>
+                    <input type="number" id="km" required placeholder="0">
+                </div>
+
+                <div class="field full">
+                    <label class="f-label">
+                        Technicien(s)
+                        <span id="tech-admin-link" class="manage-lnk hidden" onclick="toggleTechAdmin()">[Gérer]</span>
+                    </label>
                     
-                    <div class="date-filter-wrapper">
-                        <label style="margin:0;"><i class="fa-regular fa-calendar-days"></i> Du :</label>
-                        <input type="date" id="search-date-start" onchange="renderTable()">
-                        <label style="margin:0;">Au :</label>
-                        <input type="date" id="search-date-end" onchange="renderTable()">
-                        <button class="btn-action" style="padding: 8px 12px; font-size: 0.8rem;" onclick="resetSearchDates()"><i class="fa-solid fa-rotate-right"></i></button>
-                    </div>
+                    <div id="tech-list-container" class="tech-checkbox-grid">
+                        </div>
 
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <label style="margin:0;">Afficher:</label>
-                        <select id="pageLimit" style="width:100px; padding:5px;" onchange="renderTable()">
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                            <option value="1000">1000</option>
-                            <option value="all">Tout (ALL)</option>
-                        </select>
+                    <div id="tech-admin-box" class="tech-box hidden">
+                        <input type="text" id="new-tech-name" placeholder="Nom du nouveau technicien">
+                        <div class="tech-box-row">
+                            <button type="button" onclick="addTech()" class="btn-primary" style="flex:1;padding:9px 10px;font-size:0.78rem;"><i class="fa-solid fa-plus"></i> Ajouter</button>
+                            <button type="button" onclick="removeTech()" class="btn-sm-red" style="flex:1;justify-content:center;" title="Cochez les techniciens à supprimer puis cliquez ici"><i class="fa-solid fa-trash"></i> Supprimer Sélection</button>
+                        </div>
                     </div>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div class="results-badge">
-                        <i class="fa-solid fa-list-check"></i> Résultats affichés : <span id="displayed-count">0</span>
-                    </div>
-                    <button id="multi-delete-btn" class="btn-action btn-delete-multi hidden" onclick="deleteSelected()"><i class="fa-solid fa-trash-can"></i> Supprimer la sélection (<span id="select-count">0</span>)</button>
+                <div class="field full">
+                    <label class="f-label">Détails de l'entretien</label>
+                    <input type="text" id="entretien" placeholder="Description des travaux effectués...">
+                </div>
+                <div class="field full">
+                    <label class="f-label">Note</label>
+                    <textarea id="note" placeholder="Remarques, observations..."></textarea>
                 </div>
 
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style="width:40px;"><input type="checkbox" id="selectAll" class="row-checkbox" onchange="toggleSelectAll(this)"></th>
-                                <th>Matricule</th>
-                                <th>Client / Date</th>
-                                <th>Entretien / Note</th>
-                                <th>Tech</th>
-                                <th id="th-actions" class="hidden">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="dataBody"></tbody>
-                    </table>
+                <button type="submit" id="save-btn" class="btn-primary full">
+                    <i class="fa-solid fa-floppy-disk"></i> Sauvegarder
+                </button>
+            </form>
+        </div>
+
+        <div id="v-search" class="view">
+            <div class="view-topbar" style="margin-bottom:18px;">
+                <button class="btn-back" onclick="goHomeAndReset()"><i class="fa-solid fa-arrow-left"></i> Retour</button>
+                <div class="view-title" style="margin:0;">Historique & Recherche</div>
+            </div>
+
+            <div class="srch-controls">
+                <div class="srch-wrap">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="globalSearch" placeholder="Matricule, client, technicien, détails..." oninput="safeRenderTable()">
                 </div>
+                <div class="date-range">
+                    <label>Du</label>
+                    <input type="date" id="search-date-start" onchange="safeRenderTable()">
+                    <span class="dr-sep">→</span>
+                    <label>Au</label>
+                    <input type="date" id="search-date-end" onchange="safeRenderTable()">
+                    <button class="btn-sm-ico" onclick="resetSearchDates()"><i class="fa-solid fa-rotate-right"></i></button>
+                </div>
+                <select class="limit-sel" id="pageLimit" onchange="safeRenderTable()">
+                    <option value="10">10 lignes</option>
+                    <option value="20">20 lignes</option>
+                    <option value="50">50 lignes</option>
+                    <option value="100">100 lignes</option>
+                    <option value="all">Tout</option>
+                </select>
+            </div>
+
+            <div class="res-bar">
+                <div class="res-pill"><i class="fa-solid fa-list-check"></i>&nbsp; <span id="displayed-count">0</span> résultat(s)</div>
+                <button id="multi-delete-btn" class="btn-sm-red hidden" onclick="deleteSelected()">
+                    <i class="fa-solid fa-trash-can"></i> Supprimer (<span id="select-count">0</span>)
+                </button>
+            </div>
+
+            <div class="tbl-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:34px;"><input type="checkbox" id="selectAll" class="row-cb" onchange="toggleSelectAll(this)"></th>
+                            <th>Matricule</th>
+                            <th>Client</th>
+                            <th>Date</th>
+                            <th>Entretien</th>
+                            <th>KM</th>
+                            <th>Tech(s)</th>
+                            <th id="th-actions" class="hidden">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataBody"></tbody>
+                </table>
             </div>
         </div>
+
     </div>
+</div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAVwCOEKZUSCPMurHWbgmRjQcQTWpAJ4kc",
-            authDomain: "lahcen-auto.firebaseapp.com",
-            databaseURL: "https://lahcen-auto-default-rtdb.firebaseio.com/",
-            projectId: "lahcen-auto",
-            storageBucket: "lahcen-auto.firebasestorage.app",
-            messagingSenderId: "821702720115",
-            appId: "1:821702720115:web:d5d85ffb1b06a0d2e94806"
-        };
+    const app = initializeApp({
+        apiKey: "AIzaSyAVwCOEKZUSCPMurHWbgmRjQcQTWpAJ4kc",
+        authDomain: "lahcen-auto.firebaseapp.com",
+        databaseURL: "https://lahcen-auto-default-rtdb.firebaseio.com/",
+        projectId: "lahcen-auto",
+        storageBucket: "lahcen-auto.firebasestorage.app",
+        messagingSenderId: "821702720115",
+        appId: "1:821702720115:web:d5d85ffb1b06a0d2e94806"
+    });
+    const db = getDatabase(app);
+    const dbRef = ref(db,'entretiens');
+    const techRef = ref(db,'techniciens');
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-        const dbRef = ref(db, 'entretiens');
-        const techRef = ref(db, 'techniciens');
+    window.allData = []; window.vehiclesData = {}; window.techMap = {}; window.editingId = null;
+    
+    // Modification: Désormais ADMIN a les mêmes privilèges d'interface que SUPER ADMIN
+    window.isSuperAdmin = () => {
+        const role = (sessionStorage.getItem('user_role')||'').toUpperCase().replace('_',' ').trim();
+        return role === 'SUPER ADMIN' || role === 'ADMIN';
+    };
 
-        window.allData = [];
-        window.vehiclesData = {};
+    onValue(techRef, snap => {
+        const s = document.getElementById('tech-list-container');
+        s.innerHTML = '';
         window.techMap = {};
-        window.editingId = null;
+        snap.forEach(c => { 
+            const n = c.val().name; 
+            window.techMap[n]=c.key; 
+            s.innerHTML += `
+                <label class="tech-cb-lbl">
+                    <input type="checkbox" value="${n}" class="tech-cb-input" onchange="this.parentElement.classList.toggle('active-cb', this.checked)">
+                    <i class="fa-solid fa-user-wrench" style="font-size:0.75rem;"></i> ${n}
+                </label>`;
+        });
+    });
 
-        window.isSuperAdmin = () => (sessionStorage.getItem('user_role') || '').toUpperCase().replace('_', ' ').trim() === 'SUPER ADMIN';
-
-        // Helper: Convert Excel Serial Date to YYYY-MM-DD
-        function excelDateToJSDate(serial) {
-            if (typeof serial !== 'number') return serial; // Already a string
-            const date = new Date((serial - 25569) * 86400 * 1000);
-            return date.toISOString().split('T')[0];
+    window.addTech = () => {
+        const n = document.getElementById('new-tech-name').value.trim();
+        if(n) push(techRef,{name:n}).then(()=>document.getElementById('new-tech-name').value='');
+    };
+    window.removeTech = () => {
+        const checked = document.querySelectorAll('.tech-cb-input:checked');
+        if(!checked.length) {
+            alert('Veuillez sélectionner (cocher) au moins un technicien à supprimer.');
+            return;
         }
-
-        onValue(techRef, (snap) => {
-            const s = document.getElementById('tech');
-            s.innerHTML = '<option value="">-- Choisir --</option>';
-            window.techMap = {};
-            snap.forEach(c => {
-                const name = c.val().name;
-                window.techMap[name] = c.key;
-                s.innerHTML += `<option value="${name}">${name}</option>`;
+        if(confirm(`Supprimer définitivement ${checked.length} technicien(s) ?`)) {
+            checked.forEach(cb => {
+                const n = cb.value;
+                if(n && window.techMap[n]) remove(ref(db,'techniciens/'+window.techMap[n]));
             });
+        }
+    };
+
+    window.loadData = function() {
+        onValue(dbRef, snap => {
+            window.allData = []; window.vehiclesData = {};
+            snap.forEach(c => {
+                let item = c.val(); item.id = c.key; window.allData.push(item);
+                if(item.matricule && !window.vehiclesData[item.matricule])
+                    window.vehiclesData[item.matricule] = {v:item.vehicule||'',c:item.client||''};
+            });
+            window.renderTable();
+            updateDashboardStats();
+        });
+    };
+
+    window.renderTable = function() {
+        const body = document.getElementById('dataBody');
+        const q = (document.getElementById('globalSearch').value||'').toLowerCase().trim();
+        const limit = document.getElementById('pageLimit').value;
+        const sd = document.getElementById('search-date-start').value;
+        const ed = document.getElementById('search-date-end').value;
+        const admin = isSuperAdmin();
+        body.innerHTML = '';
+        document.getElementById('th-actions').classList.toggle('hidden',!admin);
+        document.getElementById('tech-admin-link').classList.toggle('hidden',!admin);
+        document.getElementById('import-section').classList.toggle('hidden',!admin);
+        document.getElementById('selectAll').checked = false;
+        updateSelectCount();
+        let filtered = window.allData.filter(d => {
+            const t = `${d.matricule||''} ${d.client||''} ${d.vehicule||''} ${d.tech||''} ${d.entretien||''} ${d.note||''}`.toLowerCase();
+            let dm = true;
+            if(sd && d.date < sd) dm=false;
+            if(ed && d.date > ed) dm=false;
+            return (q==='' || t.includes(q)) && dm;
+        });
+        filtered.sort((a,b)=>(new Date(b.date||0))-(new Date(a.date||0)));
+        let data = limit==='all' ? filtered : filtered.slice(0,parseInt(limit));
+        document.getElementById('displayed-count').innerText = data.length;
+        if(!data.length){
+            body.innerHTML=`<tr><td colspan="8" class="empty-td"><i class="fa-solid fa-inbox" style="font-size:1.5rem;display:block;margin-bottom:8px;opacity:0.25;"></i>Aucun résultat</td></tr>`;
+            return;
+        }
+        data.forEach(item => {
+            const tr = document.createElement('tr');
+            tr.innerHTML=`
+                <td><input type="checkbox" class="row-cb item-check" data-id="${item.id}" onchange="updateSelectCount()"></td>
+                <td><span class="mat-tag">${item.matricule||'-'}</span><small>${item.vehicule||'-'}</small></td>
+                <td><strong>${item.client||'-'}</strong></td>
+                <td>${item.date||'-'}</td>
+                <td>${item.entretien||'—'}<small>${item.note?'📝 '+item.note:''}</small></td>
+                <td>${item.km?Number(item.km).toLocaleString()+' km':'—'}</td>
+                <td>${item.tech||'-'}</td>
+                <td class="${admin?'':'hidden'}">
+                    <div class="row-acts">
+                        <button class="act-btn ed" onclick="editEntry('${item.id}')"><i class="fa-solid fa-pen"></i></button>
+                        <button class="act-btn dl" onclick="deleteEntry('${item.id}')"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </td>`;
+            body.appendChild(tr);
+        });
+    };
+
+    window.resetSearchDates = ()=>{
+        document.getElementById('search-date-start').value='';
+        document.getElementById('search-date-end').value='';
+        document.getElementById('globalSearch').value='';
+        window.renderTable();
+    };
+
+    window.deleteEntry = id=>{ if(confirm('Supprimer ?')) remove(ref(db,'entretiens/'+id)); };
+    window.deleteSelected = ()=>{
+        const sel = Array.from(document.querySelectorAll('.item-check:checked')).map(cb=>cb.dataset.id);
+        if(sel.length && confirm(`Supprimer ${sel.length} ligne(s) ?`)) sel.forEach(id=>remove(ref(db,'entretiens/'+id)));
+    };
+
+    window.editEntry = id=>{
+        const item = window.allData.find(d=>d.id===id); if(!item) return;
+        window.editingId=id; switchView('add');
+        document.getElementById('form-title').innerText="Modifier l'entretien";
+        selectRadio('new'); toggleMatriculeType();
+        
+        ['matricule','vehicule','client','date','km','entretien','note'].forEach(k=>{ const el=document.getElementById(k); if(el) el.value=item[k]||''; });
+        
+        // Restore tech checkboxes
+        document.querySelectorAll('.tech-cb-input').forEach(cb => {
+            cb.checked = false;
+            cb.parentElement.classList.remove('active-cb');
+            if(item.tech && item.tech.includes(cb.value)) {
+                cb.checked = true;
+                cb.parentElement.classList.add('active-cb');
+            }
         });
 
-        window.addTech = () => {
-            const n = document.getElementById('new-tech-name').value.trim();
-            if(n) push(techRef, {name: n}).then(() => document.getElementById('new-tech-name').value = '');
-        };
+        document.getElementById('save-btn').innerHTML='<i class="fa-solid fa-floppy-disk"></i> Mettre à jour';
+    };
 
-        window.removeTech = () => {
-            const n = document.getElementById('tech').value;
-            if(n && window.techMap[n]) {
-                if(confirm(`Supprimer ${n} ?`)) remove(ref(db, 'techniciens/' + window.techMap[n]));
-            }
-        };
+    document.getElementById('maintenanceForm').onsubmit = e=>{
+        e.preventDefault();
+        const isEx = document.querySelector('input[name="mat_type"]:checked').value==='existing';
+        const mat = isEx ? document.getElementById('matricule-select').value : document.getElementById('matricule').value;
+        
+        const techInputs = document.querySelectorAll('.tech-cb-input:checked');
+        if (techInputs.length === 0) {
+            alert('Veuillez sélectionner au moins un technicien.');
+            return;
+        }
+        const selectedTechs = Array.from(techInputs).map(cb => cb.value).join(' & ');
 
-        window.loadData = function() {
-            onValue(dbRef, (snap) => {
-                window.allData = [];
-                window.vehiclesData = {};
-                snap.forEach(c => {
-                    let item = c.val();
-                    item.id = c.key;
-                    window.allData.push(item);
-                    if(!window.vehiclesData[item.matricule]) window.vehiclesData[item.matricule] = { v: item.vehicule, c: item.client };
+        const data = {
+            matricule: mat.toUpperCase().trim(),
+            vehicule:  document.getElementById('vehicule').value.trim(),
+            client:    document.getElementById('client').value.trim(),
+            date:      document.getElementById('date').value,
+            km:        document.getElementById('km').value,
+            tech:      selectedTechs,
+            entretien: document.getElementById('entretien').value.trim()||'',
+            note:      document.getElementById('note').value.trim()||''
+        };
+        if(window.editingId) update(ref(db,'entretiens/'+window.editingId),data).then(goHomeAndReset);
+        else push(dbRef,data).then(goHomeAndReset);
+    };
+
+    window.updateDashboardStats = function(){
+        const now = new Date();
+        const todayStr = now.toISOString().split('T')[0];
+        const cm = now.getMonth(), cy = now.getFullYear();
+        const todayN = window.allData.filter(d=>d.date===todayStr).length;
+        const monthN = window.allData.filter(d=>{if(!d.date)return false; const dt=new Date(d.date); return dt.getMonth()===cm&&dt.getFullYear()===cy;}).length;
+        const yearN  = window.allData.filter(d=>d.date&&new Date(d.date).getFullYear()===cy).length;
+        document.getElementById('stat-today').innerText = todayN;
+        document.getElementById('stat-month').innerText = monthN;
+        document.getElementById('stat-year').innerText  = yearN;
+        document.getElementById('stat-total').innerText = window.allData.length;
+        const day = now.getDate();
+        const avg = day>0?(monthN/day).toFixed(1):0;
+        document.getElementById('tr-year').innerText  = ``;
+        // Widgets
+        buildChart(); buildTechs(cm,cy); buildClients(cm,cy); buildRecent();
+    };
+
+    function buildChart(){
+        const chart = document.getElementById('activity-chart');
+        const lbls = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
+
+        const allDates = [...new Set(window.allData.map(d=>d.date).filter(Boolean))].sort();
+
+        let refDate;
+        if(allDates.length > 0) {
+            refDate = new Date(allDates[allDates.length - 1]);
+        } else {
+            refDate = new Date();
+        }
+
+        const days = [];
+        let collected = 0;
+        for(let i=20; i>=0 && collected<6; i--){
+            const d = new Date(refDate);
+            d.setDate(d.getDate() - i);
+            if(d.getDay()===0) continue; // skip dimanche
+            const str = d.toISOString().split('T')[0];
+            const n = window.allData.filter(x=>x.date===str).length;
+            days.push({ l: lbls[d.getDay()], n, str });
+            collected++;
+        }
+
+        const max = Math.max(...days.map(d=>d.n), 1);
+        const total = days.reduce((s,d)=>s+d.n, 0);
+
+        const weekLabel = refDate.toLocaleDateString('fr-FR',{month:'short', year:'numeric'});
+        document.getElementById('chart-week-lbl').innerText = total+' — '+weekLabel;
+
+        chart.innerHTML = days.map(d=>`
+            <div class="bar-col">
+                <div class="bar-track">
+                    <div class="bar-fill ${d.n>0?'':'empty'}"
+                         style="height:${d.n>0 ? Math.max(Math.round((d.n/max)*100),8) : 0}%"
+                         title="${d.str} : ${d.n} entretien(s)"></div>
+                </div>
+                <div class="bar-lbl">${d.l}</div>
+            </div>`).join('');
+    }
+
+    function buildTechs(cm,cy){
+        const counts={};
+        window.allData.forEach(d=>{
+            if(!d.tech||!d.date) return;
+            const dt=new Date(d.date);
+            if(dt.getMonth()===cm&&dt.getFullYear()===cy) {
+                // Sépare les techniciens si plusieurs ont été sélectionnés
+                d.tech.split('&').forEach(t => {
+                    const name = t.trim();
+                    if(name) counts[name]=(counts[name]||0)+1;
                 });
-                renderTable();
-                updateDashboardStats();
-            });
-        };
-
-        window.renderTable = function() {
-            const body = document.getElementById('dataBody');
-            
-            // Get filter values
-            const query = document.getElementById('globalSearch').value.toLowerCase();
-            const limit = document.getElementById('pageLimit').value;
-            const startDate = document.getElementById('search-date-start').value;
-            const endDate = document.getElementById('search-date-end').value;
-            
-            const admin = isSuperAdmin();
-            
-            body.innerHTML = "";
-            document.getElementById('th-actions').classList.toggle('hidden', !admin);
-            document.getElementById('tech-admin-link').classList.toggle('hidden', !admin);
-            document.getElementById('import-section').classList.toggle('hidden', !admin);
-            document.getElementById('selectAll').checked = false;
-            updateSelectCount();
-
-            // Filter logic (Text Match + Date Match)
-            let filtered = window.allData.filter(d => {
-                const textMatch = d.matricule.toLowerCase().includes(query) || 
-                                  d.client.toLowerCase().includes(query) || 
-                                  d.vehicule.toLowerCase().includes(query);
-                
-                let dateMatch = true;
-                if (startDate && d.date < startDate) dateMatch = false;
-                if (endDate && d.date > endDate) dateMatch = false;
-
-                return textMatch && dateMatch;
-            }).reverse();
-
-            // Limit results
-            let displayData = (limit === 'all') ? filtered : filtered.slice(0, parseInt(limit));
-
-            // Update row counter
-            document.getElementById('displayed-count').innerText = displayData.length;
-
-            // Render Rows
-            displayData.forEach(item => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td><input type="checkbox" class="row-checkbox item-check" data-id="${item.id}" onchange="updateSelectCount()"></td>
-                    <td><b>${item.matricule}</b><br><small>${item.vehicule}</small></td>
-                    <td>${item.date}<br><b>${item.client}</b></td>
-                    <td>${item.entretien || ''}<br><small>Note: ${item.note || '-'}</small><br><small>${item.km} KM</small></td>
-                    <td>${item.tech}</td>
-                    <td class="${admin ? '' : 'hidden'} action-btns">
-                        <button class="edit-btn" onclick="editEntry('${item.id}')"><i class="fa-solid fa-pen"></i></button>
-                        <button class="delete-btn" onclick="deleteEntry('${item.id}')"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                `;
-                body.appendChild(tr);
-            });
-        };
-
-        window.resetSearchDates = function() {
-            document.getElementById('search-date-start').value = "";
-            document.getElementById('search-date-end').value = "";
-            window.renderTable();
-        };
-
-        window.deleteEntry = (id) => { if(confirm("Supprimer définitivement ?")) remove(ref(db, 'entretiens/' + id)); };
-
-        window.deleteSelected = () => {
-            const selected = Array.from(document.querySelectorAll('.item-check:checked')).map(cb => cb.dataset.id);
-            if(selected.length > 0 && confirm(`Supprimer ${selected.length} lignes ?`)) {
-                selected.forEach(id => remove(ref(db, 'entretiens/' + id)));
-                alert("Terminé");
             }
-        };
+        });
+        const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5);
+        const maxV=sorted[0]?.[1]||1;
+        const colors=['#8b7fff','#00d4a0','#ffd166','#4da6ff','#ff5470'];
+        const el=document.getElementById('tech-ranking');
+        if(!sorted.length){el.innerHTML='<div style="color:var(--text3);font-size:0.78rem;">Aucune donnée ce mois</div>';return;}
+        el.innerHTML=sorted.map(([name,cnt],i)=>`
+            <div class="tech-row">
+                <div class="tech-av" style="background:${colors[i]}22;color:${colors[i]};">${name.charAt(0).toUpperCase()}</div>
+                <div class="tech-info">
+                    <div class="tech-name">${name}</div>
+                    <div class="tech-bar"><div class="tech-bar-fill" style="width:${Math.round((cnt/maxV)*100)}%;background:${colors[i]};"></div></div>
+                </div>
+                <div class="tech-cnt">${cnt}</div>
+            </div>`).join('');
+    }
 
-        window.editEntry = (id) => {
-            const item = window.allData.find(d => d.id === id);
-            if(!item) return;
-            window.editingId = id;
-            switchView('add');
-            document.getElementById('matricule').value = item.matricule;
-            document.getElementById('vehicule').value = item.vehicule;
-            document.getElementById('client').value = item.client;
-            document.getElementById('date').value = item.date;
-            document.getElementById('km').value = item.km;
-            document.getElementById('tech').value = item.tech;
-            document.getElementById('entretien').value = item.entretien || '';
-            document.getElementById('note').value = item.note || '';
-            document.getElementById('save-btn').innerText = "Mettre à jour";
-        };
+    function buildClients(cm,cy){
+        const counts={};
+        window.allData.forEach(d=>{
+            if(!d.client||!d.date) return;
+            const dt=new Date(d.date);
+            if(dt.getMonth()===cm&&dt.getFullYear()===cy) counts[d.client]=(counts[d.client]||0)+1;
+        });
+        const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5);
+        const maxV=sorted[0]?.[1]||1;
+        const colors=['#ffd166','#00d4a0','#8b7fff','#4da6ff','#ff5470'];
+        const el=document.getElementById('client-ranking');
+        if(!sorted.length){el.innerHTML='<div style="color:var(--text3);font-size:0.78rem;">Aucun client ce mois</div>';return;}
+        el.innerHTML=sorted.map(([name,cnt],i)=>`
+            <div class="tech-row">
+                <div class="tech-av" style="background:${colors[i]}22;color:${colors[i]};">${name.charAt(0).toUpperCase()}</div>
+                <div class="tech-info">
+                    <div class="tech-name">${name}</div>
+                    <div class="tech-bar"><div class="tech-bar-fill" style="width:${Math.round((cnt/maxV)*100)}%;background:${colors[i]};"></div></div>
+                </div>
+                <div class="tech-cnt">${cnt}</div>
+            </div>`).join('');
+    }
 
-        document.getElementById('maintenanceForm').onsubmit = (e) => {
-            e.preventDefault();
-            const data = {
-                matricule: document.getElementById('matricule').value.toUpperCase(),
-                vehicule: document.getElementById('vehicule').value,
-                client: document.getElementById('client').value,
-                date: document.getElementById('date').value,
-                km: document.getElementById('km').value,
-                tech: document.getElementById('tech').value,
-                entretien: document.getElementById('entretien').value || "",
-                note: document.getElementById('note').value || ""
-            };
-            if(window.editingId) update(ref(db, 'entretiens/' + window.editingId), data).then(goHomeAndReset);
-            else push(dbRef, data).then(goHomeAndReset);
-        };
+    function buildRecent(){
+        const el=document.getElementById('recent-list');
+        const recent=[...window.allData].sort((a,b)=>(new Date(b.date||0))-(new Date(a.date||0))).slice(0,5);
+        if(!recent.length){el.innerHTML='<div style="color:var(--text3);font-size:0.78rem;">Aucune fiche enregistrée</div>';return;}
+        el.innerHTML=recent.map(item=>`
+            <div class="recent-item">
+                <div class="r-mat">${item.matricule||'-'}</div>
+                <div class="r-info">
+                    <div class="r-client">${item.client||'-'}</div>
+                    <div class="r-det">${item.entretien||item.vehicule||'—'}</div>
+                </div>
+                <div class="r-date">${item.date||'-'}</div>
+            </div>`).join('');
+    }
 
-        window.handleExcelImport = (e) => {
-            const file = e.target.files[0];
-            const reader = new FileReader();
-            reader.onload = (evt) => {
-                const workbook = XLSX.read(evt.target.result, { type: 'binary' });
-                const rows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[workbook.SheetNames[0]]);
-                if(confirm(`Importer ${rows.length} lignes ?`)) {
-                    rows.forEach(r => push(dbRef, {
-                        matricule: (r.matricule || "").toString().toUpperCase(),
-                        vehicule: r.véhicule || r.vehicule || "",
-                        client: r.client || "",
-                        date: excelDateToJSDate(r.date) || new Date().toISOString().split('T')[0],
-                        km: r.kilométrage || r.kilometrage || 0,
-                        tech: r.technicien || "Inconnu",
-                        entretien: r.détails || r.details || "",
-                        note: r.note || ""
-                    }));
-                }
-            };
-            reader.readAsBinaryString(file);
-        };
+    window.calculateCustomStat = function(){
+        const s=document.getElementById('dash-start').value;
+        const e=document.getElementById('dash-end').value;
+        if(s&&e) document.getElementById('custom-res').innerText=window.allData.filter(d=>d.date>=s&&d.date<=e).length;
+    };
 
-        window.updateDashboardStats = function() {
-            const now = new Date();
-            const todayStr = now.toISOString().split('T')[0];
-            const currentMonth = now.getMonth();
-            const currentYear = now.getFullYear();
+    function parseExcelDate(val){
+        if(!val) return new Date().toISOString().split('T')[0];
+        if(typeof val==='number'){ const d=new Date(Math.round((val-25569)*86400*1000)); return d.toISOString().split('T')[0]; }
+        const s=val.toString().trim();
+        const m1=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/); if(m1) return `${m1[3]}-${m1[2].padStart(2,'0')}-${m1[1].padStart(2,'0')}`;
+        const m2=s.match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/); if(m2) return `${m2[3]}-${m2[2].padStart(2,'0')}-${m2[1].padStart(2,'0')}`;
+        if(/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+        const d=new Date(s); if(!isNaN(d)) return d.toISOString().split('T')[0];
+        return new Date().toISOString().split('T')[0];
+    }
 
-            document.getElementById('stat-today').innerText = window.allData.filter(d => d.date === todayStr).length;
-            document.getElementById('stat-month').innerText = window.allData.filter(d => new Date(d.date).getMonth() === currentMonth && new Date(d.date).getFullYear() === currentYear).length;
-            document.getElementById('stat-year').innerText = window.allData.filter(d => new Date(d.date).getFullYear() === currentYear).length;
-            document.getElementById('stat-total').innerText = window.allData.length;
-
-            const s = document.getElementById('matricule-select');
-            s.innerHTML = '<option value="">-- Choisir --</option>';
-            for(let m in window.vehiclesData) s.innerHTML += `<option value="${m}">${m}</option>`;
-        };
-
-        window.calculateCustomStat = function() {
-            const start = document.getElementById('dash-start').value;
-            const end = document.getElementById('dash-end').value;
-            if(start && end) {
-                const count = window.allData.filter(d => d.date >= start && d.date <= end).length;
-                document.getElementById('custom-res').innerText = "Résultat: " + count;
+    window.handleExcelImport = async e=>{
+        const file=e.target.files[0]; if(!file) return;
+        e.target.value='';
+        const reader=new FileReader();
+        reader.onload=async evt=>{
+            const wb=XLSX.read(evt.target.result,{type:'binary',cellDates:false});
+            const rows=XLSX.utils.sheet_to_row_object_array(wb.Sheets[wb.SheetNames[0]]);
+            if(!rows.length){alert('Fichier vide.');return;}
+            if(!confirm(`Importer ${rows.length} ligne(s) ?`)) return;
+            let done=0;
+            for(let i=0;i<rows.length;i+=30){
+                await Promise.all(rows.slice(i,i+30).map(r=>push(dbRef,{
+                    matricule:(r.matricule||'').toString().toUpperCase().trim(),
+                    vehicule:(r.véhicule||r.vehicule||r.Véhicule||'').toString().trim(),
+                    client:(r.client||r.Client||'').toString().trim(),
+                    date:parseExcelDate(r.date||r.Date),
+                    km:parseInt(r.kilométrage||r.km||r.KM||r.kilometrage||0)||0,
+                    tech:(r.technicien||r.Technicien||'Inconnu').toString().trim(),
+                    entretien:(r.détails||r.details||r.Détails||'').toString().trim(),
+                    note:(r.note||r.Note||'').toString().trim()
+                })));
+                done+=Math.min(30,rows.length-i);
+                await new Promise(res=>setTimeout(res,150));
             }
+            alert(`✅ ${done} ligne(s) importée(s) !`);
         };
-    </script>
+        reader.readAsBinaryString(file);
+    };
+</script>
 
-    <script>
-        function checkPassword(e) {
-            e.preventDefault();
-            const pwd = document.getElementById('password-input').value;
-            fetch('https://oulid-auto.alamiuness.workers.dev', { method: 'POST', body: JSON.stringify({ password: pwd }) })
-            .then(r => r.json()).then(d => {
-                if(d.success) {
-                    sessionStorage.setItem('auth_token', 'true');
-                    sessionStorage.setItem('user_role', d.role || 'ADMIN');
-                    location.reload();
-                } else document.getElementById('login-error').classList.remove('hidden');
-            });
+<script>
+    window.addEventListener('load',()=>{
+        const lbl=document.getElementById('dash-today-lbl');
+        if(lbl) lbl.innerText=new Date().toLocaleDateString('fr-FR',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+    });
+
+    function checkPassword(e){
+        e.preventDefault();
+        fetch('https://oulid-auto.alamiuness.workers.dev',{method:'POST',body:JSON.stringify({password:document.getElementById('password-input').value})})
+        .then(r=>r.json()).then(d=>{
+            if(d.success){ sessionStorage.setItem('auth_token','true'); sessionStorage.setItem('user_role',d.role||'ADMIN'); location.reload(); }
+            else document.getElementById('login-error').classList.remove('hidden');
+        });
+    }
+
+    function switchView(v){
+        document.querySelectorAll('.view').forEach(el=>el.classList.remove('active-view'));
+        document.getElementById('v-'+v).classList.add('active-view');
+        if(v==='search') safeRenderTable();
+    }
+
+    function goHomeAndReset(){
+        window.editingId=null;
+        document.getElementById('maintenanceForm').reset();
+        document.getElementById('save-btn').innerHTML='<i class="fa-solid fa-floppy-disk"></i> Sauvegarder';
+        document.getElementById('form-title').innerText='Nouvel Entretien';
+        selectRadio('new');
+        
+        // Reset checkboxes techniciens
+        document.querySelectorAll('.tech-cb-input').forEach(cb => {
+            cb.checked = false;
+            cb.parentElement.classList.remove('active-cb');
+        });
+
+        switchView('home');
+    }
+
+    function selectRadio(val){
+        document.querySelectorAll('.radio-opt').forEach(el=>el.classList.remove('active'));
+        document.getElementById(val==='new'?'ro-new':'ro-ex').classList.add('active');
+        const inp=document.querySelector(`input[name="mat_type"][value="${val}"]`);
+        if(inp){inp.checked=true; toggleMatriculeType();}
+    }
+
+    function toggleMatriculeType(){
+        const isEx=document.querySelector('input[name="mat_type"]:checked').value==='existing';
+        document.getElementById('matricule').classList.toggle('hidden',isEx);
+        document.getElementById('mat-ex-wrap').classList.toggle('hidden',!isEx);
+        document.getElementById('matricule-select').classList.toggle('hidden',!isEx);
+        document.getElementById('matricule').required=!isEx;
+        if(isEx){document.getElementById('matricule').value='';document.getElementById('matricule-select').value='';closeMatriculeDropdown();}
+        else{document.getElementById('matricule-select').value='';closeMatriculeDropdown();}
+    }
+
+    function handleMatriculeInput(val){
+        const q=val.toUpperCase().trim();
+        const dd=document.getElementById('matricule-dropdown');
+        const keys=Object.keys(window.vehiclesData||{}).sort((a,b)=>a.localeCompare(b));
+        const matches=q===''?keys.slice(0,30):keys.filter(k=>k.includes(q)).slice(0,30);
+        if(!matches.length){dd.style.display='none';return;}
+        dd.innerHTML=matches.map(m=>{
+            const info=window.vehiclesData[m];
+            const hl=q?m.replace(q,`<span class="mat-hl">${q}</span>`):m;
+            return `<div class="mat-opt" onclick="selectMatricule('${m}')">${hl}<small>${info?.v||''} — ${info?.c||''}</small></div>`;
+        }).join('');
+        dd.style.display='block';
+    }
+
+    function selectMatricule(m){
+        document.getElementById('matricule-select').value=m;
+        closeMatriculeDropdown();
+        const d=window.vehiclesData?.[m];
+        if(d){document.getElementById('vehicule').value=d.v||'';document.getElementById('client').value=d.c||'';}
+    }
+
+    function closeMatriculeDropdown(){const d=document.getElementById('matricule-dropdown');if(d)d.style.display='none';}
+    function safeRenderTable(){if(typeof window.renderTable==='function')window.renderTable();}
+    function toggleSelectAll(master){document.querySelectorAll('.item-check').forEach(cb=>cb.checked=master.checked);updateSelectCount();}
+    function updateSelectCount(){
+        const count=document.querySelectorAll('.item-check:checked').length;
+        const btn=document.getElementById('multi-delete-btn');
+        const ctr=document.getElementById('select-count');
+        if(btn&&ctr){ctr.innerText=count;btn.classList.toggle('hidden',count===0);}
+    }
+
+    const LIGHT_VARS = {
+        '--bg':'#f0f0f7','--surface':'#ffffff','--surface2':'#f5f5fb','--surface3':'#eaeaf3',
+        '--border':'rgba(0,0,0,0.07)','--border2':'rgba(0,0,0,0.12)',
+        '--text':'#0e0e1c','--text2':'rgba(14,14,28,0.48)','--text3':'rgba(14,14,28,0.26)'
+    };
+
+    function applyTheme(light){
+        const b=document.body;
+        if(light){
+            b.setAttribute('data-lt','1');
+            Object.entries(LIGHT_VARS).forEach(([k,v])=>b.style.setProperty(k,v));
+        } else {
+            b.removeAttribute('data-lt');
+            Object.keys(LIGHT_VARS).forEach(v=>b.style.removeProperty(v));
         }
+        localStorage.setItem('lahcen_theme', light?'light':'dark');
+        // Sync login button
+        const ico=document.getElementById('login-theme-ico');
+        const lbl=document.getElementById('login-theme-lbl');
+        if(ico&&lbl){ if(light){ico.className='fa-solid fa-sun';lbl.innerText='Mode Jour';} else {ico.className='fa-solid fa-moon';lbl.innerText='Mode Nuit';} }
+    }
 
-        function switchView(v) {
-            document.querySelectorAll('.view').forEach(el => el.classList.remove('active-view'));
-            document.getElementById('v-' + v).classList.add('active-view');
+    function loginToggleTheme(){
+        const isLight=document.body.getAttribute('data-lt')==='1';
+        applyTheme(!isLight);
+    }
+
+    function toggleTheme(){
+        const isLight=document.body.getAttribute('data-lt')==='1';
+        applyTheme(!isLight);
+    }
+
+    function logout(){sessionStorage.clear();location.reload();}
+    function toggleTechAdmin(){document.getElementById('tech-admin-box').classList.toggle('hidden');}
+
+    window.onload=()=>{
+        const savedTheme = localStorage.getItem('lahcen_theme');
+        if(savedTheme==='light') applyTheme(true);
+        else applyTheme(false);
+
+        if(sessionStorage.getItem('auth_token')==='true'){
+            document.getElementById('login-screen').style.display='none';
+            document.getElementById('app-content').style.display='flex';
+            document.getElementById('role-badge').innerText=sessionStorage.getItem('user_role');
+            setTimeout(()=>{if(window.loadData)window.loadData();},300);
         }
-
-        function goHomeAndReset() {
-            window.editingId = null;
-            document.getElementById('maintenanceForm').reset();
-            document.getElementById('save-btn').innerText = "Sauvegarder";
-            switchView('home');
-        }
-
-        function toggleMatriculeType() {
-            const isEx = document.querySelector('input[name="mat_type"]:checked').value === 'existing';
-            document.getElementById('matricule').classList.toggle('hidden', isEx);
-            document.getElementById('matricule-select').classList.toggle('hidden', !isEx);
-            document.getElementById('matricule').required = !isEx;
-        }
-
-        function fillVehicleInfo() {
-            const m = document.getElementById('matricule-select').value;
-            if(m && window.vehiclesData[m]) {
-                document.getElementById('vehicule').value = window.vehiclesData[m].v;
-                document.getElementById('client').value = window.vehiclesData[m].c;
-            }
-        }
-
-        function toggleSelectAll(master) {
-            document.querySelectorAll('.item-check').forEach(cb => cb.checked = master.checked);
-            updateSelectCount();
-        }
-
-        function updateSelectCount() {
-            const count = document.querySelectorAll('.item-check:checked').length;
-            document.getElementById('select-count').innerText = count;
-            document.getElementById('multi-delete-btn').classList.toggle('hidden', count === 0);
-        }
-
-        function toggleTheme() {
-            const b = document.body;
-            b.setAttribute('data-theme', b.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
-        }
-
-        function logout() { sessionStorage.clear(); location.reload(); }
-        function toggleTechAdmin() { document.getElementById('tech-admin-box').classList.toggle('hidden'); }
-
-        window.onload = () => {
-            if(sessionStorage.getItem('auth_token') === 'true') {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('app-content').style.display = 'flex';
-                document.getElementById('role-badge').innerText = sessionStorage.getItem('user_role');
-                if(window.loadData) window.loadData();
-            }
-        };
-    </script>
+    };
+</script>
 </body>
 </html>
